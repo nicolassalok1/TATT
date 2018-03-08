@@ -1,0 +1,14 @@
+Le but de ces exercices est de comprendre comment altérer le déroulement d'un programme en remplaçant certaines instructions du code assembleur par des nops (par exemple);
+
+On peut aisément modifier le code hexa su binaire en utilisant vim, avec l'otpion ':%!xxd' ou '%!xxd -r' pour ouvrir/fermer le mode d'affichage en hexa.
+
+Pour le premier exercice:
+on supprime le saut conditionnel en 0x804861d qui nous permet de rester dans la condition où les serials sont égaux meme si ce n'est pas le cas.
+La suppression se fait en remplaçant les octets par des 0x90 : des nops.
+
+Pour le deuxieme exercice c'est différent, 
+en 0x804864d, lors de l'éxecution, 
+on commence à vouloir print le message de success à l'utilisateur. 
+Or il se trouve qu'au même endroit, 
+il y à la clef serial; donc en supprimant "clé <- message" on garde le message en mémoire et il sera print.
+La suppression se fait en remplaçant les octets par des 0x90 : des nops.
