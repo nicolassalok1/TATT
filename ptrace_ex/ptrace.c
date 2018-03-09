@@ -7,260 +7,263 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-struct bp
-{
-	unsigned addr;
-	char val;
-};
-
-#define BPS_MAX 100
-
 /****************** primitives de debug **************/
+
 long activate_debug(void)
 {
-	//FIXME: appel Ã  ptrace pour indiquer quâ€™on veut se faire dÃ©boguer
+  //FIXME: appel à ptrace pour indiquer qu'on veut se faire déboguer
 }
 
 long cont_signal(pid_t pid, int signal)
 {
-	//FIXME: appel Ã  ptrace pour continuer lâ€™exÃ©cution du fils
+  //FIXME: appel à ptrace pour continuer l'exécution du fils
 }
 
 long mem_read(pid_t pid, unsigned addr)
 {
-	//FIXME: appel Ã  ptrace pour lire un long dans la mÃ©moire du fils
+  //FIXME: appel à ptrace pour lire un long dans la mémoire du fils
 }
 
 long singlestep(pid_t pid)
 {
-	//FIXME: appel Ã  ptrace pour exÃ©cuter une seule instruction du fils
+  //FIXME: appel à ptrace pour exécuter une seule instruction du fils
 }
 
 long mem_write(pid_t pid, unsigned addr, long val)
 {
-	//FIXME: appel Ã  ptrace pour Ã©crire un long dans la mÃ©moire du fils
+  //FIXME: appel à ptrace pour écrire un long dans la mémoire du fils
 }
 
 long regs_read(pid_t pid, struct user_regs_struct *regs)
 {
-	memset(regs, 0, sizeof (struct user_regs_struct));
-	//FIXME: appel Ã  ptrace pour rÃ©cupÃ©rer les registres du fils
+  memset(regs, 0, sizeof (struct user_regs_struct));
+  //FIXME: appel à ptrace pour récupérer les registres du fils
 }
 
 long regs_write(pid_t pid, struct user_regs_struct *regs)
 {
-	//FIXME: appel Ã  ptrace pour remplacer les registres du fils
+  //FIXME: appel à ptrace pour remplacer les registres du fils
 }
 
 /****************** fonctions de debug **************/
+
 long cont(pid_t pid)
 {
-	return (cont_signal(pid, 0));
+  return (cont_signal(pid, 0));
 }
 
 long mem_write_char(pid_t pid, unsigned addr, unsigned char c)
 {
-	long data;
-	data = mem_read(pid, addr);
-	data = (data & 0xffffff00) | c;  // endianness
-	return (mem_write(pid, addr, data));
+  long data;
+
+  data = mem_read(pid, addr);
+  data = (data & 0xffffff00) | c;  // endianness
+  return (mem_write(pid, addr, data));
 }
 
 unsigned char mem_read_char(pid_t pid, unsigned addr)
 {
-	return (mem_read(pid, addr) % 0x100);  // endianness
+  return (mem_read(pid, addr) % 0x100);  // endianness
 }
 
 void mem_print_chars(pid_t pid, unsigned addr)
 {
-	unsigned data;
-	data = mem_read(pid, addr);
-	fprintf(stderr, "@%8x : %02x %02x %02x %02x\n", addr,
-	data % 0x100, (data >> 8) % 0x100,
-	(data >> 16) % 0x100, (data >> 24) % 0x100);
-}
+  unsigned data;
 
+  data = mem_read(pid, addr);
+  fprintf(stderr, "@%8x : %02x %02x %02x %02x\n", addr,
+                data % 0x100, (data >> 8) % 0x100,
+                (data >> 16) % 0x100, (data >> 24) % 0x100);
+}
 
 void regs_dump(pid_t pid)
 {
-	struct user_regs_struct regs;
-	if (regs_read(pid, &regs) == -1)
-	fprintf(stderr, "Erreur regs_read !\n");
-	fprintf(stderr, "eax=%08x ebx=%08x ecx=%08x edx=%08x\n",
-	regs.eax, regs.ebx, regs.ecx, regs.edx);
-	fprintf(stderr, "esi=%08x edi=%08x\n", regs.esi, regs.edi);
-	fprintf(stderr, "eip=%08x esp=%08x ebp=%08x\n",
-	regs.eip, regs.esp, regs.ebp);
+  struct user_regs_struct regs;
+
+  if (regs_read(pid, &regs) == -1)
+    fprintf(stderr, "Erreur regs_read !\n");
+  fprintf(stderr, "eax=%08x ebx=%08x ecx=%08x edx=%08x\n",
+                  regs.eax, regs.ebx, regs.ecx, regs.edx);
+  fprintf(stderr, "esi=%08x edi=%08x\n", regs.esi, regs.edi);
+  fprintf(stderr, "eip=%08x esp=%08x ebp=%08x\n",
+                  regs.eip, regs.esp, regs.ebp);
 }
-
-
-
 
 /***************** gestion des breakpoints **************/
 
+struct bp
+{
+  unsigned addr;
+  char val;
+};
 
+#define BPS_MAX 100
 struct bp bps[BPS_MAX];
 int nb_bps = 0;
 
-
-
 int bp_set(pid_t pid, unsigned addr)
 {
-	if (nb_bps >= BPS_MAX)
-		return 0;
-	/*
-	FIXME: rÃ©cupÃ©rer la valeur initiale, ajouter dans la liste des
-	breakpoints, Ã©crire un â€™int 3â€™ Ã  lâ€™adresse et afficher sur
-	stderr un message contenant le numÃ©ro du breakpoint, lâ€™adresse et la
-	valeur originale : â€™bp #%d : [%08x]=0x%02xâ€™
-	*/
-	return 1;
-	}
+  if (nb_bps >= BPS_MAX)
+    return 0;
+
+  /*
+    FIXME: récupérer la valeur initiale, ajouter dans la liste des
+    breakpoints, écrire un 'int 3' à l'adresse et afficher sur
+    stderr un message contenant le numéro du breakpoint, l'adresse et la
+    valeur originale : 'bp #%d : [%08x]=0x%02x'
+  */
+        
+  return 1;
+}
 
 int bp_disable(pid_t pid, unsigned addr)
 {
-	/*
-	FIXME: retrouver le breakpoint correspondant Ã  lâ€™adresse donnÃ©e,
-	lire lâ€™octet et vÃ©rifier la prÃ©sence dâ€™un â€™int 3â€™, restaurer la
-	valeur initiale puis afficher sur stderr la nouvelle valeur lue dans
-	la mÃ©moire : â€™disable bp #%d : [%08x] 0x%02x -> 0x%02xâ€™
-	*/
-	return 1;
+  /*
+    FIXME: retrouver le breakpoint correspondant à l'adresse donnée,
+    lire l'octet et vérifier la présence d'un 'int 3', restaurer la
+    valeur initiale puis afficher sur stderr la nouvelle valeur lue dans
+    la mémoire : 'disable bp #%d : [%08x] 0x%02x -> 0x%02x'
+  */
+
+  return 1;
 }
 
 int bp_enable(pid_t pid, unsigned addr)
-
 {
-	/*
-	FIXME: retrouver le breakpoint correspondant Ã  lâ€™adresse donnÃ©e,
-	lire lâ€™octet et vÃ©rifier quâ€™il correspond Ã  la valeur initiale,
-	Ã©crire un â€™int 3â€™ puis afficher sur stderr la nouvelle valeur lue dans
-	la mÃ©moire : â€™enable bp #%d : [%08x] 0x%02x -> 0x%02xâ€™
-	*/
-	return 1;
+  /*
+    FIXME: retrouver le breakpoint correspondant à l'adresse donnée,
+    lire l'octet et vérifier qu'il correspond à la valeur initiale,
+    écrire un 'int 3' puis afficher sur stderr la nouvelle valeur lue dans
+    la mémoire : 'enable bp #%d : [%08x] 0x%02x -> 0x%02x'
+  */
+
+  return 1;
 }
 
-
 /**************** callbacks bas niveau ********************/
+
 void callback_breakpoint(pid_t pid, unsigned addr);
 void callback_begin(pid_t pid);
+
 void callback_sigtrap(pid_t pid)
 {
-	static int first = 1;
-	unsigned addr;
-	if (first == 1)
-	{
-		// premier signal de debug, on appelle le callback programme
-		callback_begin(pid);
-		first = 0;
-	}
-	else
-	{
-		/*
-		FIXME: dÃ©crÃ©menter EIP qui pointe vers lâ€™instruction suivante (le â€™int 3â€™
-		a Ã©tÃ© exÃ©cutÃ©) et afficher sur stderr le message â€™sigtrap @%xâ€™
-		*/
-		// on appelle le callback programme
-		callback_breakpoint(pid, addr);
-		/*
-		FIXME: dÃ©sactiver le breakpoint, effectuer un singlestep du fils,
-		utiliser â€™waitpidâ€™ pour rÃ©cupÃ©rer le signal SIGTRAP et rÃ©activer le
-		breakpoint
-		*/
-	}
-	/* on continue */
-	cont(pid);
+  static int first = 1;
+  unsigned addr;
+
+  if (first == 1)
+  {
+    // premier signal de debug, on appelle le callback programme
+    callback_begin(pid);
+    first = 0;
+  }
+  else
+  {
+    /*
+      FIXME: décrémenter EIP qui pointe vers l'instruction suivante (le 'int 3'
+      a été exécuté) et afficher sur stderr le message 'sigtrap @%x'
+    */
+
+    // on appelle le callback programme
+    callback_breakpoint(pid, addr);
+
+    /*
+      FIXME: désactiver le breakpoint, effectuer un singlestep du fils,
+      utiliser 'waitpid' pour récupérer le signal SIGTRAP et réactiver le
+      breakpoint
+    */
+  }
+
+  /* on continue */
+  cont(pid);
 }
 
 void  callback_generic(pid_t pid, int signal)
 {
-	unsigned addr;
-	struct user_regs_struct regs;
-	regs_read(pid, &regs);
-	addr = regs.eip;
-	if (signal == SIGILL)
-	printf("Illegal instruction @%x\n", addr);
-	else if (signal == SIGSEGV)
-	printf("Segmentation fault @%x\n", addr);
-	else
-	printf("signal %d @%x\n", signal, addr);
-	mem_print_chars(pid, addr);
-	regs_dump(pid);
-	exit(1);
+  unsigned addr;
+  struct user_regs_struct regs;
+
+  regs_read(pid, &regs);
+  addr = regs.eip;
+
+  if (signal == SIGILL)
+    printf("Illegal instruction @%x\n", addr);
+  else if (signal == SIGSEGV)
+    printf("Segmentation fault @%x\n", addr);
+  else
+    printf("signal %d @%x\n", signal, addr);
+  mem_print_chars(pid, addr);
+  regs_dump(pid);
+  exit(1);
 }
 
 void debug_loop(pid_t pid)
 {
-	int status;
-	int signal;
-	while (1)
-	{
-		waitpid(pid, &status, 0);
-		if (WIFSTOPPED(status))
-		{
-			/* signal ptrace */
-			signal = WSTOPSIG(status);
-			if (signal == SIGTRAP)
-				callback_sigtrap(pid);
+  int status;
+  int signal;
 
-			else
-				callback_generic(pid, signal);
-		}
-		else
-		{
-			fprintf(stderr, "Signal, exit !\n");
-			break;
-		}
-	}
+  while (1)
+  {
+    waitpid(pid, &status, 0);
+    if (WIFSTOPPED(status))
+    {
+      /* signal ptrace */
+      signal = WSTOPSIG(status);
+      if (signal == SIGTRAP)
+        callback_sigtrap(pid);
+      else
+        callback_generic(pid, signal);
+    }
+    else
+    {
+      fprintf(stderr, "Signal, exit !\n");
+      break;
+    }
+  }
 }
 
 /**************** callbacks programme ******************/
-// A partir dâ€™ici, le code Ã  remplir est spÃ©cifique au keygen
+
+// A partir d'ici, le code à remplir est spécifique au keygen
+
 void callback_begin(pid_t pid)
 {
-/*
-FIXME: code exÃ©cutÃ© au dÃ©but du dÃ©bogage : placer un breakpoint Ã  la
-bonne adresse, grÃ¢ce Ã  bp_set, pour pouvoir lire le serial dans la
-mÃ©moire au moment du breakpoint
-*/
-
+  /*
+    FIXME: code exécuté au début du débogage : placer un breakpoint à la
+    bonne adresse, grâce à bp_set, pour pouvoir lire le serial dans la
+    mémoire au moment du breakpoint
+  */
 }
+
 void callback_breakpoint(pid_t pid, unsigned addr)
-
 {
-/*
-FIXME: code exÃ©cutÃ© au breakpoint : vÃ©rifier lâ€™adresse du
-breakpoint, lire les registres et dans la mÃ©moire pour rÃ©cupÃ©rer et
-afficher le serial sur stderr
-*/
-
+  /*
+    FIXME: code exécuté au breakpoint : vérifier l'adresse du
+    breakpoint, lire les registres et dans la mémoire pour récupérer et
+    afficher le serial sur stderr
+  */
 }
+
 /****************** programme *****************/
 
 int main(int argc, char *argv[])
 {
-	pid_t pid;
-	pid = fork();
-	if (pid == -1)
-	exit(1);
-	if (pid != 0) /* papa */
+  pid_t pid;
 
-	{
-	debug_loop(pid);
-	exit(0);
-
-	}
-	/* fiston */
-	if (activate_debug() == -1)
-
-	{
-	perror("Cannot ptrace :");
-	exit(2);
-
-	}
-	/* gÃ©nÃ¨re un SIGTRAP car le dÃ©bogage est activÃ© */
-	execl("./crackme", "./crackme", argv[1], "test", NULL);
-	exit(42);
-
+  pid = fork();
+  if (pid == -1)
+    exit(1);
+  if (pid != 0) /* papa */
+  {
+    debug_loop(pid);
+    exit(0);
+  }
+  /* fiston */
+  if (activate_debug() == -1)
+  {
+    perror("Cannot ptrace :");
+    exit(2);
+  }
+  /* génère un SIGTRAP car le débogage est activé */
+  execl("./crackme", "./crackme", argv[1], "test", NULL);
+  exit(42);
 }
