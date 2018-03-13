@@ -20,6 +20,6 @@ int main(int argc, char *argv[])
     exit(2);
   }
   /* génère un SIGTRAP car le débogage est activé */
-  execl("./crackme", "./crackme", argv[1], "test", NULL);
+  execl("../OG/original", "../OG/original", "argv[1]", "test", NULL);
   exit(42);
 }

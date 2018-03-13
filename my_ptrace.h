@@ -20,8 +20,6 @@ struct bp
 #define BPS_MAX 100
 struct bp bps[BPS_MAX];
 
-
-
 void callback_breakpoint(pid_t pid, unsigned addr);
 void callback_begin(pid_t pid);
 

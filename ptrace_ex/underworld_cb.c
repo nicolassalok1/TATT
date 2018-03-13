@@ -2,9 +2,6 @@
 
 /**************** callbacks bas niveau ********************/
 
-void callback_breakpoint(pid_t pid, unsigned addr);
-void callback_begin(pid_t pid);
-
 void callback_sigtrap(pid_t pid)
 {
   static int first = 1;

@@ -12,3 +12,12 @@ on commence à vouloir print le message de success à l'utilisateur.
 Or il se trouve qu'au même endroit, 
 il y à la clef serial; donc en supprimant "clé <- message" on garde le message en mémoire et il sera print.
 La suppression se fait en remplaçant les octets par des 0x90 : des nops.
+
+
+
+
+POIUR LES EXERCICES 1 ET 2 VEUILLEZ FAIRE LA COMMANDE:
+
+./RUN_ME.sh
+
+Merci

@@ -4,36 +4,46 @@
 
 long activate_debug(void)
 {
-  //FIXME: appel à ptrace pour indiquer qu'on veut se faire déboguer
+  //FIXME: appel ï¿½ ptrace pour indiquer qu'on veut se faire dï¿½boguer
+  return ptrace (PTRACE_TRACEME, 0, NULL, NULL);
 }
 
 long cont_signal(pid_t pid, int signal)
 {
-  //FIXME: appel à ptrace pour continuer l'exécution du fils
+  //FIXME: appel ï¿½ ptrace pour continuer l'exï¿½cution du fils
+  return ptrace  (PTRACE_CONT, pid, NULL, signal);
 }
 
 long mem_read(pid_t pid, unsigned addr)
 {
-  //FIXME: appel à ptrace pour lire un long dans la mémoire du fils
+  //FIXME: appel ï¿½ ptrace pour lire un long dans la mï¿½moire du fils
+  return ptrace  (PTRACE_PEEKDATA, pid, addr, NULL);
+  /*if (word == -1)
+    if (errno)
+      fail ();*/
 }
 
 long singlestep(pid_t pid)
 {
-  //FIXME: appel à ptrace pour exécuter une seule instruction du fils
+  //FIXME: appel ï¿½ ptrace pour exï¿½cuter une seule instruction du fils
+  return ptrace  (PTRACE_SINGLESTEP, pid, NULL, NULL);
 }
 
 long mem_write(pid_t pid, unsigned addr, long val)
 {
-  //FIXME: appel à ptrace pour écrire un long dans la mémoire du fils
+  //FIXME: appel ï¿½ ptrace pour ï¿½crire un long dans la mï¿½moire du fils
+  return ptrace  (PTRACE_POKEDATA, pid, addr, val);
 }
 
 long regs_read(pid_t pid, struct user_regs_struct *regs)
 {
   memset(regs, 0, sizeof (struct user_regs_struct));
-  //FIXME: appel à ptrace pour récupérer les registres du fils
+  //FIXME: appel ï¿½ ptrace pour rï¿½cupï¿½rer les registres du fils
+  return ptrace  (PTRACE_GETREGS, pid, NULL, regs);
 }
 
 long regs_write(pid_t pid, struct user_regs_struct *regs)
 {
-  //FIXME: appel à ptrace pour remplacer les registres du fils
+  //FIXME: appel ï¿½ ptrace pour remplacer les registres du fils
+  return ptrace  (PTRACE_SETREGS, pid, NULL, regs);
 }

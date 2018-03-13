@@ -4,7 +4,7 @@ int main ()
 {
 	int code = 0x90;
 
-	int fd = fopen ("./crackme", "r+");
+	int fd = fopen ("OG/crackme", "r+");
 
 	int fs = fseek(fd, 1565, SEEK_SET);
 

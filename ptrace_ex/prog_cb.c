@@ -7,6 +7,9 @@
 
 void callback_begin(pid_t pid)
 {
+  unsigned addr = 0x804861b;
+  bp_set(pid, addr);
+  //regs_dump(pid);
   /*
     FIXME: code exécuté au début du débogage : placer un breakpoint à la
     bonne adresse, grâce à bp_set, pour pouvoir lire le serial dans la
