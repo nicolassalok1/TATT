@@ -19,6 +19,17 @@ void callback_sigtrap(pid_t pid)
       FIXME: décrémenter EIP qui pointe vers l'instruction suivante (le 'int 3'
       a été exécuté) et afficher sur stderr le message 'sigtrap @%x'
     */
+    struct user_regs_struct regs;
+
+    regs_read(pid, &regs);
+    regs_dump(pid);
+
+    addr = --regs.eip;
+
+    regs_write(pid, &regs);
+    regs_dump(pid);
+
+    fprintf(stderr, "sigtrap @%x\n", addr);
 
     // on appelle le callback programme
     callback_breakpoint(pid, addr);
@@ -28,6 +39,10 @@ void callback_sigtrap(pid_t pid)
       utiliser 'waitpid' pour récupérer le signal SIGTRAP et réactiver le
       breakpoint
     */
+    bp_disable(pid, addr);
+    singlestep(pid);
+    wait(&pid);
+    bp_enable(pid, addr);
   }
 
   /* on continue */

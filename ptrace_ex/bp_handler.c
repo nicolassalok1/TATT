@@ -3,7 +3,7 @@
 /***************** gestion des breakpoints **************/
 
 int nb_bps = 0;
-const unsigned int3 = 0xCC;
+const unsigned int3 = 0xcc;
 
 int bp_set(pid_t pid, unsigned addr)
 {
@@ -39,7 +39,7 @@ int bp_disable(pid_t pid, unsigned addr)
     if (bps[i].addr == addr)
     {
       mem_write(pid, addr, bps[i].val);
-      printf("disable bp #%d : [%08x] 0x%02x -> 0x%02x", 
+      printf("disable bp #%d : [%08x] 0x%02x -> 0x%02x\n", 
                 i, bps[i].addr, int3, bps[i].val);
       return 0;
     }
@@ -61,7 +61,7 @@ int bp_enable(pid_t pid, unsigned addr)
     if (bps[i].addr == addr)
     {
       mem_write(pid, addr, int3);
-      printf("enable bp #%d : [%08x] 0x%02x -> 0x%02x", 
+      printf("enable bp #%d : [%08x] 0x%02x -> 0x%02x\n", 
                 i, bps[i].addr, bps[i].val, int3);
       return 0;
     }
