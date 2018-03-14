@@ -1,6 +1,5 @@
 #include "ptrace.h"
 
-/**************** callbacks bas niveau ********************/
 
 void callback_sigtrap(pid_t pid)
 {
@@ -22,7 +21,7 @@ void callback_sigtrap(pid_t pid)
     struct user_regs_struct regs;
 
     regs_read(pid, &regs);
-    regs_dump(pid);
+    //regs_dump(pid);
 
     addr = --regs.eip;
 
@@ -39,8 +38,14 @@ void callback_sigtrap(pid_t pid)
       utiliser 'waitpid' pour récupérer le signal SIGTRAP et réactiver le
       breakpoint
     */
+
     bp_disable(pid, addr);
+
+    //ERROR
+
+    regs_dump(pid);
     singlestep(pid);
+    regs_dump(pid);
     wait(&pid);
     bp_enable(pid, addr);
   }
@@ -48,6 +53,13 @@ void callback_sigtrap(pid_t pid)
   /* on continue */
   cont(pid);
 }
+
+
+
+
+
+
+
 
 void  callback_generic(pid_t pid, int signal)
 {

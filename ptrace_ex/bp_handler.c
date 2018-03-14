@@ -34,7 +34,7 @@ int bp_set(pid_t pid, unsigned addr)
 
 int bp_disable(pid_t pid, unsigned addr)
 {
-  for(int i = 0; i <= nb_bps; i++)
+  for(int i = 0; i < nb_bps; i++)
   {
     if (bps[i].addr == addr)
     {
@@ -56,7 +56,7 @@ int bp_disable(pid_t pid, unsigned addr)
 
 int bp_enable(pid_t pid, unsigned addr)
 {
-  for(int i = 0; i <= nb_bps; i++)
+  for(int i = 0; i < nb_bps; i++)
   {
     if (bps[i].addr == addr)
     {
