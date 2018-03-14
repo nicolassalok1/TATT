@@ -32,12 +32,11 @@ void callback_breakpoint(pid_t pid, unsigned addr)
 
   regs_read(pid, &regs);
 
-
-
   fprintf(stderr, "\n");
-  for (unsigned i = 4; i < 27; i++)
+
+  for (unsigned i = 0; i < 24; i++)
   {
-    teub[i] = mem_read_char(pid, regs.esp + i);
+    teub[i] = mem_read_char(pid, regs.edi + i);
   }
 
   fprintf(stderr, "%s", &teub);
