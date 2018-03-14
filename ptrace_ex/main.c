@@ -20,6 +20,6 @@ int main(int argc, char *argv[])
     exit(2);
   }
   /* génère un SIGTRAP car le débogage est activé */
-  execl("../OG/original", "../OG/original", "test", "test", NULL);
+  execl("../OG/original", "../OG/original", "r", "Ui92./jklV8/nSAlovaq/P", NULL);
   exit(42);
 }

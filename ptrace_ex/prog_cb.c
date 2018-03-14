@@ -7,7 +7,7 @@
 
 void callback_begin(pid_t pid)
 {
-  unsigned addr = 0x804861b;
+  unsigned addr = 0x8048616;
   bp_set(pid, addr);
   /*
     FIXME: code exécuté au début du débogage : placer un breakpoint à la
@@ -28,11 +28,19 @@ void callback_breakpoint(pid_t pid, unsigned addr)
 //NOT SURE
 
   struct user_regs_struct regs;
+  char teub[30];
 
   regs_read(pid, &regs);
 
-  for (unsigned i = 8; i < 20; i++)
+
+
+  fprintf(stderr, "\n");
+  for (unsigned i = 4; i < 27; i++)
   {
-    mem_read_char(pid, regs.ebp + i);
+    teub[i] = mem_read_char(pid, regs.esp + i);
   }
+
+  fprintf(stderr, "%s", &teub);
+  fprintf(stderr, "\n");
+  fprintf(stderr, "\n");
 }

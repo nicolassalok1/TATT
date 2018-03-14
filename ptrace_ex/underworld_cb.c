@@ -27,7 +27,7 @@ void callback_sigtrap(pid_t pid)
     addr = --regs.eip;
 
     regs_write(pid, &regs);
-    regs_dump(pid);
+    //regs_dump(pid);
 
     fprintf(stderr, "sigtrap @%x\n", addr);
 
