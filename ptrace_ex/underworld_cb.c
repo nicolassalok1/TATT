@@ -43,9 +43,9 @@ void callback_sigtrap(pid_t pid)
 
     //ERROR
 
-    regs_dump(pid);
+    //regs_dump(pid);
     singlestep(pid);
-    regs_dump(pid);
+    //regs_dump(pid);
     wait(&pid);
     bp_enable(pid, addr);
   }
